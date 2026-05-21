@@ -1,0 +1,40 @@
+<div class="header-actions">
+  <h2>Maintenance & Operational Expenses</h2>
+  <button routerLink="/expenses/new" class="btn-add">Log New Expense</button>
+</div>
+
+<div *ngIf="loading">Loading expense logs...</div>
+<div *ngIf="error" class="error-msg">{{ error }}</div>
+
+<div *ngIf="!loading && expenses.length === 0" class="empty-state">
+  <p>No operational expenses logged yet.</p>
+</div>
+
+<div class="table-container" *ngIf="!loading && expenses.length > 0">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Associated Property</th>
+        <th>Category Type</th>
+        <th>Description</th>
+        <th>Cost</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let expense of expenses">
+        <td>{{ expense.date | date:'mediumDate' }}</td>
+        <td>{{ propertiesMap[expense.propertyId] || 'Global / Unassigned' }}</td>
+        <td>
+          <span class="type-badge">{{ expense.type }}</span>
+        </td>
+        <td>{{ expense.description }}</td>
+        <td class="expense-amount"><strong>{{ expense.amount }} TTD</strong></td>
+        <td>
+          <button (click)="onDelete(expense.id, expense.description)" class="btn-delete">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

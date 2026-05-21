@@ -1,0 +1,37 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label>Name</label>
+  <input formControlName="name" />
+  <div *ngIf="form.controls['name'].touched && form.controls['name'].invalid">
+    Name is required
+  </div>
+
+  <label>Contact</label>
+  <input formControlName="contact" />
+  <div *ngIf="form.controls['contact'].touched && form.controls['contact'].invalid">
+    Contact is required
+  </div>
+
+  <label>Property</label>
+  <select formControlName="propertyId">
+    <option *ngFor="let property of properties" [value]="property.id">
+      {{ property.name }}
+    </option>
+  </select>
+  <div *ngIf="form.controls['propertyId'].touched && form.controls['propertyId'].invalid">
+    A property must be selected
+  </div>
+
+  <label>Lease Start</label>
+  <input type="date" formControlName="leaseStart" />
+  <div *ngIf="form.controls['leaseStart'].touched && form.controls['leaseStart'].invalid">
+    Lease start date is required
+  </div>
+
+  <label>Lease End</label>
+  <input type="date" formControlName="leaseEnd" />
+  <div *ngIf="form.controls['leaseEnd'].touched && form.controls['leaseEnd'].invalid">
+    Lease end date is required
+  </div>
+
+  <button type="submit" [disabled]="form.invalid">Save Tenant</button>
+</form>

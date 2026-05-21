@@ -1,0 +1,42 @@
+<div class="header-actions">
+  <h2>Rent Payments Ledger</h2>
+  <button routerLink="/payments/new" class="btn-add">Record New Payment</button>
+</div>
+
+<div *ngIf="loading">Loading payments financial data...</div>
+<div *ngIf="error" class="error-msg">{{ error }}</div>
+
+<div *ngIf="!loading && payments.length === 0" class="empty-state">
+  <p>No transactions recorded yet.</p>
+</div>
+
+<div class="table-container" *ngIf="!loading && payments.length > 0">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Property</th>
+        <th>Tenant</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let payment of payments">
+        <td>{{ payment.date | date:'mediumDate' }}</td>
+        <td>{{ propertiesMap[payment.propertyId] || 'Unknown Property' }}</td>
+        <td>{{ tenantsMap[payment.tenantId] || 'Unknown Tenant' }}</td>
+        <td><strong>{{ payment.amount }} TTD</strong></td>
+        <td>
+          <span class="status-badge" [ngClass]="payment.status.toLowerCase()">
+            {{ payment.status }}
+          </span>
+        </td>
+        <td>
+          <button (click)="onDelete(payment.id)" class="btn-delete">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

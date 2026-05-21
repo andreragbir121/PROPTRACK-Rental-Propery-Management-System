@@ -1,0 +1,44 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Name</label>
+    <input id="name" formControlName="name" />
+    <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid">
+      Name is required / Minimum 3 characters
+    </div>
+  </div>
+
+  <div>
+    <label for="address">Address</label>
+    <input id="address" formControlName="address" />
+    <div *ngIf="form.get('address')?.touched && form.get('address')?.invalid">
+      Address is required
+    </div>
+  </div>
+
+  <div>
+    <label for="monthlyRent">Monthly Rent</label>
+    <input id="monthlyRent" type="number" formControlName="monthlyRent" />
+    <div *ngIf="form.get('monthlyRent')?.touched && form.get('monthlyRent')?.invalid">
+      Rent is required / Must be greater than 0
+    </div>
+  </div>
+
+  <div>
+    <label for="status">Status</label>
+    <select id="status" formControlName="status">
+      <option value="">Select status</option>
+      <option [value]="PropertyStatus.Occupied">Occupied</option>
+      <option [value]="PropertyStatus.Vacant">Vacant</option>
+    </select>
+    <div *ngIf="form.get('status')?.touched && form.get('status')?.invalid">
+      Status must be selected
+    </div>
+  </div>
+
+  <div>
+    <label for="description">Description</label>
+    <textarea id="description" formControlName="description"></textarea>
+  </div>
+
+  <button type="submit" [disabled]="form.invalid">Save Property</button>
+</form>

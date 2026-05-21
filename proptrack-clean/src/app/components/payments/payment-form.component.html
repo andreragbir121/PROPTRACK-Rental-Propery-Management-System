@@ -1,0 +1,48 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label>Property</label>
+  <select formControlName="propertyId">
+    <option value="">-- Select Property --</option>
+    <option *ngFor="let property of properties" [value]="property.id">
+      {{ property.name }}
+    </option>
+  </select>
+  <div *ngIf="form.get('propertyId')?.touched && form.get('propertyId')?.invalid">
+    A property must be selected
+  </div>
+
+  <label>Tenant</label>
+  <select formControlName="tenantId">
+    <option value="">-- Select Tenant --</option>
+    <option *ngFor="let tenant of filteredTenants" [value]="tenant.id">
+      {{ tenant.name }}
+    </option>
+  </select>
+  <div *ngIf="form.get('tenantId')?.touched && form.get('tenantId')?.invalid">
+    A tenant must be selected
+  </div>
+
+  <label>Amount</label>
+  <input type="number" formControlName="amount" />
+  <div *ngIf="form.get('amount')?.touched && form.get('amount')?.invalid">
+    Amount is required / Must be greater than 0
+  </div>
+
+  <label>Date</label>
+  <input type="date" formControlName="date" />
+  <div *ngIf="form.get('date')?.touched && form.get('date')?.invalid">
+    Payment date is required
+  </div>
+
+  <label>Status</label>
+  <select formControlName="status">
+    <option value="">-- Select Status --</option>
+    <option value="Paid">Paid</option>
+    <option value="Pending">Pending</option>
+    <option value="Late">Late</option>
+  </select>
+  <div *ngIf="form.get('status')?.touched && form.get('status')?.invalid">
+    Status must be selected
+  </div>
+
+  <button type="submit" [disabled]="form.invalid">Save Payment</button>
+</form>

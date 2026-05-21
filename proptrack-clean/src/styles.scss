@@ -1,0 +1,326 @@
+/* ==========================================================================
+   PROPTRACK GLOBAL STYLESHEET: MINIMALISTIC PURPLE THEME (JUNIOR VERSION)
+   ========================================================================== */
+
+/* 1. Theme Colors */
+:root {
+  --primary-deep: #4c1d95;      /* Deep Royal Purple */
+  --primary-main: #6d28d9;      /* Vibrant Accent Purple */
+  --primary-light: #ede9fe;     /* Soft Light Purple Background */
+  --bg-app: #f9fafb;            /* Clean Off-White Background */
+  --bg-card: #ffffff;           /* Crisp White for Cards/Containers */
+  --text-main: #1f2937;         /* Dark Charcoal for high readability */
+  --text-muted: #6b7280;        /* Cool Grey for notes/dates */
+  --border-color: #e5e7eb;      /* Light Grey separating lines */
+  --success: #059669;           /* Emerald Green for "Paid"/"Occupied" */
+  --error: #dc2626;             /* Crimson Red for validations/deletes */
+}
+
+/* 2. Global Reset and Body */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  line-height: 1.5;
+  padding-bottom: 60px;
+}
+
+/* 3. Navigation Bar Links */
+.navbar {
+  display: flex;
+  align-items: center;
+  background-color: var(--primary-deep);
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.navbar a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  margin-right: 1.5rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.navbar a:hover {
+  color: #ffffff;
+}
+
+.navbar a.active {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* 4. Layout Container */
+main, .content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* 5. Header Grid */
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.header-actions h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--primary-deep);
+}
+
+/* 6. Buttons Toolkit */
+button, .btn-add, .btn-view, .btn-delete, .btn-back {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-add {
+  background-color: var(--primary-main);
+  color: #ffffff;
+}
+.btn-add:hover {
+  background-color: var(--primary-deep);
+}
+
+.btn-view {
+  background-color: var(--primary-light);
+  color: var(--primary-main);
+}
+.btn-view:hover {
+  background-color: #ddd6fe;
+}
+
+.btn-delete {
+  background-color: #fee2e2;
+  color: var(--error);
+}
+.btn-delete:hover {
+  background-color: #fca5a5;
+}
+
+.btn-back {
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  margin-bottom: 1rem;
+}
+.btn-back:hover {
+  background-color: #f3f4f6;
+  color: var(--text-main);
+}
+
+button:disabled {
+  background-color: var(--border-color) !important;
+  color: var(--text-muted) !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 7. Data Tables */
+.table-container, .tenant-grid {
+  background-color: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th {
+  background-color: #fcfbfe;
+  color: var(--primary-deep);
+  font-weight: 600;
+  padding: 1rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background-color: #faf8ff;
+}
+
+/* 8. Property List Cards & Containers */
+.property-list, .breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.property-card, .sub-section, .main-card {
+  background-color: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.property-card h3, .sub-section h3, .main-card h2 {
+  color: var(--primary-deep);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.property-card p, .sub-section p, .main-card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.property-card strong, .sub-section strong, .main-card strong {
+  color: var(--text-main);
+}
+
+.card-actions, .action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+/* 9. Status Badges */
+.status-badge, .badge-inline {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-transform: capitalize;
+  width: max-content;
+  margin-bottom: 0.5rem;
+}
+
+.status-badge.paid, .status-badge.occupied, .status-badge.active,
+.badge-inline.paid, .badge-inline.occupied, .badge-inline.active {
+  background-color: #d1fae5;
+  color: var(--success);
+}
+
+.status-badge.unpaid, .status-badge.vacant, .status-badge.pending,
+.badge-inline.unpaid, .badge-inline.vacant, .badge-inline.pending {
+  background-color: #fee2e2;
+  color: var(--error);
+}
+
+/* 10. Simple Input Forms */
+form {
+  background-color: var(--bg-card);
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+form label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary-deep);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+form input, form select, form textarea {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: #ffffff;
+  margin-bottom: 1.25rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+form input:focus, form select:focus, form textarea:focus {
+  border-color: var(--primary-main);
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+}
+
+/* 11. Error Texts */
+.error-msg, .invalid-feedback {
+  color: var(--error);
+  font-size: 0.8rem;
+  margin-top: -1rem;
+  margin-bottom: 1.25rem;
+  font-weight: 500;
+}
+
+/* 12. Dashboard Widgets */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.stat-card {
+  background-color: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.stat-card .stat-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.stat-card .stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-deep);
+  margin-top: 0.25rem;
+}
+
+.stat-card .stat-value.positive {
+  color: var(--success);
+}
+
+.stat-card .stat-value.negative {
+  color: var(--error);
+}

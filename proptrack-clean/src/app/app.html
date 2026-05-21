@@ -1,0 +1,11 @@
+<nav class="navbar">
+  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+  <a routerLink="/properties" routerLinkActive="active">Properties</a>
+  <a routerLink="/tenants" routerLinkActive="active">Tenants</a>
+  <a routerLink="/payments" routerLinkActive="active">Payments</a>
+  <a routerLink="/expenses" routerLinkActive="active">Expenses</a>
+</nav>
+
+<main>
+  <router-outlet></router-outlet>
+</main>

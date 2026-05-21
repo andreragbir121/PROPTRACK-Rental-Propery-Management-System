@@ -1,0 +1,60 @@
+<div class="navigation-banner">
+  <button routerLink="/properties" class="btn-back">Back to Registry</button>
+</div>
+
+<div *ngIf="loading" class="state-msg">Compiling property historical dossier...</div>
+<div *ngIf="error" class="error-msg">{{ error }}</div>
+
+<div *ngIf="!loading && property" class="detail-dashboard">
+  
+  <div class="main-card">
+    <div class="card-header">
+      <h2>{{ property.name }}</h2>
+      <span class="status-badge" [ngClass]="property.status.toLowerCase()">{{ property.status }}</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Physical Address:</strong> {{ property.address }}</p>
+      <p><strong>Target Base Rent:</strong> {{ property.monthlyRent }} TTD / month</p>
+      <p *ngIf="property.description"><strong>Internal Notes:</strong> {{ property.description }}</p>
+    </div>
+  </div>
+
+  <div class="breakdown-grid">
+    
+    <div class="sub-section">
+      <h3>Assigned Leased Tenants</h3>
+      <div *ngIf="associatedTenants.length === 0" class="mini-empty">No tenants assigned.</div>
+      <ul class="dossier-list" *ngIf="associatedTenants.length > 0">
+        <li *ngFor="let tenant of associatedTenants">
+          <strong>{{ tenant.name }}</strong> ({{ tenant.contact }})
+          <div class="date-sub text-muted">
+            Lease: {{ tenant.leaseStart | date:'shortDate' }} to {{ tenant.leaseEnd | date:'shortDate' }}
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <h3>Rent Transaction Ledger</h3>
+      <div *ngIf="associatedPayments.length === 0" class="mini-empty">No rent payments recorded.</div>
+      <ul class="dossier-list" *ngIf="associatedPayments.length > 0">
+        <li *ngFor="let payment of associatedPayments">
+          <span class="cost-tag">{{ payment.amount }} TTD</span> — {{ payment.date | date:'mediumDate' }}
+          <span class="badge-inline" [ngClass]="payment.status.toLowerCase()">{{ payment.status }}</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <h3>Maintenance Cost Overheads</h3>
+      <div *ngIf="associatedExpenses.length === 0" class="mini-empty">No expenses logged.</div>
+      <ul class="dossier-list" *ngIf="associatedExpenses.length > 0">
+        <li *ngFor="let expense of associatedExpenses">
+          <span class="cost-tag negative">-{{ expense.amount }} TTD</span> — {{ expense.description }}
+          <div class="date-sub">Category: <em>{{ expense.type }}</em> | Date: {{ expense.date | date:'shortDate' }}</div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</div>

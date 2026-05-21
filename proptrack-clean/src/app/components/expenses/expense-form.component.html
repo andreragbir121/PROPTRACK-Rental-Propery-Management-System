@@ -1,0 +1,34 @@
+<form #expenseForm="ngForm" (ngSubmit)="onSubmit(expenseForm)">
+  <label>Property</label>
+  <select name="propertyId" [(ngModel)]="expense.propertyId" required #propertyId="ngModel">
+    <option value="0" disabled>Select property</option>
+    <option *ngFor="let property of properties" [value]="property.id">
+      {{ property.name }}
+    </option>
+  </select>
+  
+  <div *ngIf="propertyId.touched && propertyId.invalid" class="error-msg">A property must be selected</div>
+
+  <label>Description</label>
+  <input name="description" [(ngModel)]="expense.description" required #desc="ngModel" />
+  <div *ngIf="desc.touched && desc.invalid" class="error-msg">Description is required</div>
+
+  <label>Amount</label>
+  <input type="number" name="amount" [(ngModel)]="expense.amount" required min="1" #amount="ngModel" />
+  <div *ngIf="amount.touched && amount.invalid" class="error-msg">Amount is required / Must be greater than 0</div>
+
+  <label>Date</label>
+  <input type="date" name="date" [(ngModel)]="expense.date" required #date="ngModel" />
+  <div *ngIf="date.touched && date.invalid" class="error-msg">Date is required</div>
+
+  <label>Type</label>
+  <select name="type" [(ngModel)]="expense.type" required #type="ngModel">
+    <option value="" disabled>Select type</option>
+    <option [value]="ExpenseType.Maintenance">Maintenance</option>
+    <option [value]="ExpenseType.Repair">Repair</option>
+    <option [value]="ExpenseType.Renovation">Renovation</option>
+  </select>
+  <div *ngIf="type.touched && type.invalid" class="error-msg">Expense type must be selected</div>
+
+  <button type="submit" [disabled]="expenseForm.invalid">Save Expense</button>
+</form>

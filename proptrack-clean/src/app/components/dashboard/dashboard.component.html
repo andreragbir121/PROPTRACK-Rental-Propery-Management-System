@@ -1,0 +1,70 @@
+<div class="header-actions">
+  <h2>Executive Dashboard Overview</h2>
+</div>
+
+<div *ngIf="loading" class="state-msg">Analyzing property financial directories...</div>
+<div *ngIf="error" class="error-msg">{{ error }}</div>
+
+<div *ngIf="!loading && data">
+  
+  <div class="dashboard-grid">
+    
+    <div class="stat-card">
+      <div class="stat-label">Total Rent Collected</div>
+      <div class="stat-value positive">{{ data.totalRent }} TTD</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Total Expenses</div>
+      <div class="stat-value negative">{{ data.totalExpenses }} TTD</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Net Operating Income</div>
+      <div class="stat-value" [ngClass]="data.netIncome >= 0 ? 'positive' : 'negative'">
+        {{ data.netIncome }} TTD
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Property Occupancy</div>
+      <div class="stat-value">{{ data.occupied }} / {{ data.totalProperties }}</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Active Tenants</div>
+      <div class="stat-value">{{ data.activeTenants }}</div>
+    </div>
+
+  </div>
+
+  <div class="sub-section" style="max-width: 600px; margin-top: 2rem;">
+    <h3>Recent Ledger Transactions</h3>
+    
+    <div *ngIf="data.recentPayments.length === 0" class="mini-empty" style="padding: 1rem 0; color: var(--text-muted);">
+      No payment transactions recorded in the system yet.
+    </div>
+
+    <table class="data-table" *ngIf="data.recentPayments.length > 0">
+      <thead>
+        <tr>
+          <th>Payment Date</th>
+          <th>Amount Received</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payment of data.recentPayments">
+          <td>{{ payment.date | date:'mediumDate' }}</td>
+          <td><strong>{{ payment.amount }} TTD</strong></td>
+          <td>
+            <span class="status-badge" [ngClass]="payment.status.toLowerCase()">
+              {{ payment.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

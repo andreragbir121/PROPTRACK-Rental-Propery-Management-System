@@ -1,0 +1,57 @@
+{
+  "properties": [
+    {
+      "id": "1",
+      "name": "Sunrise Apartments Unit 3",
+      "address": "12 Eastern Main Road, Tunapuna",
+      "monthlyRent": 4500,
+      "status": "Occupied"
+    },
+    {
+      "id": "2",
+      "name": "Valsayn Townhouse",
+      "address": "7 Churchill Roosevelt Hwy, Valsayn",
+      "monthlyRent": 6000,
+      "status": "Vacant"
+    }
+  ],
+  "tenants": [
+    {
+      "name": "Darren Singh",
+      "contact": "1868 312 1234",
+      "propertyId": 1,
+      "leaseStart": "2026-04-02",
+      "leaseEnd": "2027-04-02",
+      "id": "UZsCqrHINkg"
+    },
+    {
+      "name": "John Pork",
+      "contact": "1868 123 6543",
+      "propertyId": 1,
+      "leaseStart": "2026-04-02",
+      "leaseEnd": "2027-04-02",
+      "id": "p3sfQaj1LEA"
+    }
+  ],
+  "rentPayments": [
+    {
+      "propertyId": 1,
+      "tenantId": null,
+      "amount": 4000,
+      "date": "2026-05-03",
+      "status": "Paid",
+      "id": "_ot2sgTnUgY"
+    }
+  ],
+  "expenses": [
+    {
+      "propertyId": 1,
+      "description": "Need To Fix Staircase",
+      "amount": 2000,
+      "date": "2026-09-29",
+      "type": "Repair",
+      "id": "YccFwVsQSlQ"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
