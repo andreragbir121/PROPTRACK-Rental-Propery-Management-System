@@ -25,7 +25,7 @@ export class TenantListComponent implements OnInit {
   // Expose fully combined filter stream directly to template async pipes
   filteredTenants$!: Observable<Tenant[]>;
 
-  // FIX: Index type map adjusted to accept both string and number keys safely
+  // Flexible lookup map for property names supporting alphanumeric keys
   propertiesMap: { [key: string | number]: string } = {}; 
   loading = true;
   error: string | null = null;
@@ -37,7 +37,7 @@ export class TenantListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // 1. Initialize the parallel reactive combination stream pipeline logic
+    // Initialize the parallel reactive combination stream pipeline logic
     this.filteredTenants$ = combineLatest([
       this.tenantsSubject.asObservable(),
       this.searchSubject.asObservable().pipe(startWith(''))
@@ -54,7 +54,7 @@ export class TenantListComponent implements OnInit {
       })
     );
 
-    // 2. Fetch master data records
+    // Fetch data payload records
     this.loadData();
   }
 
@@ -101,7 +101,7 @@ export class TenantListComponent implements OnInit {
       this.tenantService.delete(tenant.id).subscribe({
         next: () => {
           
-          // AUTOMATION: Change property status flag back to Vacant securely using string/number signatures
+          // After tenant deletion, update the associated property's status back to Vacant
           this.propertyService.update(linkedPropertyId, { status: PropertyStatus.Vacant }).subscribe({
             next: () => {
               this.loadData(); // Refresh datasets on completion

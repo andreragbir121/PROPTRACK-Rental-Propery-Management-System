@@ -8,7 +8,7 @@ export class AuthService {
   private readonly SECRET_PIN = '5678';
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
 
-  // Observable stream to check login status
+  // Expose the authentication state as an observable for components to react to changes
   isAuthenticated$: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
 
   // Synchronous getter for the guard to check quickly

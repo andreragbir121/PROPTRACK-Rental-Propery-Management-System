@@ -48,7 +48,7 @@ export class PropertyListComponent implements OnInit {
       })
     );
 
-    // 2. Fetch data payload records
+    // Fetch data payload records
     this.loadProperties();
   }
 
@@ -76,12 +76,13 @@ export class PropertyListComponent implements OnInit {
     this.searchSubject.next(value);
   }
 
-  // FIX: Parameter signatures widened to accept string or number IDs safely
+  // Parameter signatures widened to accept string or number IDs safely
   onDelete(id: string | number, name: string): void {
     if (confirm(`Are you sure you want to delete "${name}"?`)) {
       this.propertyService.delete(id).subscribe({
         next: () => {
-          this.loadProperties(); // Reloads master streams automatically following mutations
+          // Reload the properties list after deletion to reflect changes
+          this.loadProperties(); 
         },
         error: () => alert('Failed to completely delete the property record.')
       });

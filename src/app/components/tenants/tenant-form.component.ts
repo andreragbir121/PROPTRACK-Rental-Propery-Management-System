@@ -23,7 +23,7 @@ export class TenantFormComponent implements OnInit {
     private propertyService: PropertyService,
     private router: Router
   ) {
-    // 1. Initialize form fields with core assignment validation rules [cite: 122, 123, 188]
+    // Initialize form fields with validation rules
     this.form = this.fb.group({
       name: ['', Validators.required],
       contact: ['', Validators.required],
@@ -34,7 +34,7 @@ export class TenantFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // 2. Populate property dropdown choices on initialization [cite: 119]
+    // Load properties to populate the dropdown selection
     this.propertyService.getAll().subscribe({
       next: (data) => this.properties = data || [], 
       error: () => alert('Failed to load properties')
@@ -46,7 +46,7 @@ onSubmit(): void {
 
   const formValues = this.form.value;
   
-  // FIX: Safely parse id. Keep as string if it contains letters, convert only if it's a pure numeric string.
+  // Parse propertyId to handle both string and number types safely
   const selectedPropertyId = isNaN(Number(formValues.propertyId)) 
     ? formValues.propertyId 
     : Number(formValues.propertyId);
@@ -60,15 +60,15 @@ onSubmit(): void {
     leaseEnd: formValues.leaseEnd
   };
 
-  // 1. Save new tenant record to backend database
+  // Create tenant record in the backend database
   this.tenantService.create(cleanTenant).subscribe({
     next: () => {
       
-      // 2. Safely pass string or number ID directly to the PATCH request
+      //update the associated property's status to Occupied after creating a tenant 
       this.propertyService.update(selectedPropertyId, { status: PropertyStatus.Occupied }).subscribe({
         next: () => {
-          this.form.reset(); // Clear input state 
-          this.router.navigate(['/tenants']); // Redirect to tenant list [cite: 407, 431]
+          this.form.reset(); 
+          this.router.navigate(['/tenants']);
         },
         error: (err) => {
           console.error('Property status sync failed:', err);

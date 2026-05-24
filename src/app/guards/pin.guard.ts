@@ -7,10 +7,10 @@ export const pinGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   if (authService.isLoggedIn) {
-    return true; // Let them through!
+    return true;
   }
 
-  // Not logged in? Redirect them to the PIN screen and pass the attempted URL
+  // Redirect to PIN entry page with return URL for post-login navigation
   return router.createUrlTree(['/pin-entry'], {
     queryParams: { returnUrl: state.url }
   });
