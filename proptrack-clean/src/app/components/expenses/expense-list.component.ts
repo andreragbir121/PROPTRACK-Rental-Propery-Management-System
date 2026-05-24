@@ -14,7 +14,9 @@ import { forkJoin } from 'rxjs';
 })
 export class ExpenseListComponent implements OnInit {
   expenses: Expense[] = [];
-  propertiesMap: { [key: number]: string } = {}; 
+  
+  //Index type map set to accept both string and number keys safely
+  propertiesMap: { [key: string | number]: string } = {}; 
   loading = true;
   error: string | null = null;
 
@@ -31,7 +33,7 @@ export class ExpenseListComponent implements OnInit {
   loadExpenses(): void {
     this.loading = true;
     
-    // Fetch both expenses and properties in parallel
+    //Fetch both expenses and properties in parallel
     forkJoin({
       expenses: this.expenseService.getAll(),
       properties: this.propertyService.getAll()
@@ -39,8 +41,7 @@ export class ExpenseListComponent implements OnInit {
       next: ({ expenses, properties }) => {
         this.expenses = expenses || [];
         
-        // Build a quick lookup map (ID -> Name) for property data
-        const lookup: { [key: number]: string } = {};
+        const lookup: { [key: string | number]: string } = {};
         if (properties) properties.forEach(p => lookup[p.id] = p.name);
         this.propertiesMap = lookup;
 
@@ -55,8 +56,9 @@ export class ExpenseListComponent implements OnInit {
     });
   }
 
-  onDelete(id: number, desc: string): void {
-    //Prompt confirmation before deleting a record
+  // Signature updated to accept string
+  onDelete(id: string | number, desc: string): void {
+    // Prompt confirmation before deleting a record
     if (confirm(`Are you sure you want to delete the expense item: "${desc}"?`)) {
       this.expenseService.delete(id).subscribe({
         next: () => this.loadExpenses(),

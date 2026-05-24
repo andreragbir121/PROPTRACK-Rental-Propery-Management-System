@@ -16,8 +16,8 @@ export class PaymentService {
     );
   }
 
-  // Fetch payments filtered by a specific property ID
-  getByProperty(propId: number): Observable<RentPayment[]> {
+  // Fetch payments filtered by a specific property ID (Supports string and number IDs)
+  getByProperty(propId: string | number): Observable<RentPayment[]> {
     return this.http.get<RentPayment[]>(`${this.apiUrl}?propertyId=${propId}`).pipe(
       catchError(err => throwError(() => new Error('Failed to load payments for property')))
     );
@@ -30,15 +30,15 @@ export class PaymentService {
     );
   }
 
-  // Update specific fields of an existing payment record by ID
-  update(id: number, changes: Partial<RentPayment>): Observable<RentPayment> {
+  //Protect payload body by omitting primary key ID during partial structural patches
+  update(id: string | number, changes: Partial<Omit<RentPayment, 'id'>>): Observable<RentPayment> {
     return this.http.patch<RentPayment>(`${this.apiUrl}/${id}`, changes).pipe(
       catchError(err => throwError(() => new Error('Failed to update payment')))
     );
   }
 
-  // Delete a payment record by ID
-  delete(id: number): Observable<void> {
+  // Delete a payment record by ID (Signature adjusted)
+  delete(id: string | number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       catchError(err => throwError(() => new Error('Failed to delete payment')))
     );

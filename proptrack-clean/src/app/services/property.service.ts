@@ -16,8 +16,8 @@ export class PropertyService {
     );
   }
 
-  // Fetch a single property by its ID
-  getById(id: number): Observable<Property> {
+  // Fetch a single property by its ID (Supports string and number IDs)
+  getById(id: string | number): Observable<Property> {
     return this.http.get<Property>(`${this.apiUrl}/${id}`).pipe(
       catchError(err => throwError(() => new Error('Failed to load property')))
     );
@@ -31,14 +31,14 @@ export class PropertyService {
   }
 
   // Update specific fields of an existing property record by ID
-  update(id: number, changes: Partial<Property>): Observable<Property> {
+  update(id: string | number, changes: Partial<Property>): Observable<Property> {
     return this.http.patch<Property>(`${this.apiUrl}/${id}`, changes).pipe(
       catchError(err => throwError(() => new Error('Failed to update property')))
     );
   }
 
   // Delete a property record by ID
-  delete(id: number): Observable<void> {
+  delete(id: string | number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       catchError(err => throwError(() => new Error('Failed to delete property')))
     );

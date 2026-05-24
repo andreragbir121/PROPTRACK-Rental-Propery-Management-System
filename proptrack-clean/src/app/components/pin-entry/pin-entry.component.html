@@ -1,0 +1,26 @@
+<div class="pin-container">
+  <div class="pin-card">
+    <h2>Security Verification</h2>
+    <p>Please enter your access PIN to continue.</p>
+    
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <input 
+          type="password" 
+          [(ngModel)]="enteredPin" 
+          name="pin" 
+          placeholder="Enter PIN" 
+          maxlength="4"
+          autocomplete="off"
+          required
+        />
+      </div>
+      
+      <div *ngIf="errorMessage" class="error-msg">
+        {{ errorMessage }}
+      </div>
+      
+      <button type="submit" class="btn-unlock">Unlock Application</button>
+    </form>
+  </div>
+</div>

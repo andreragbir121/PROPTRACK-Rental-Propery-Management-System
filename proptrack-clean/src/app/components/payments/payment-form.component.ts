@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; // 1. Imported ChangeDetectorRef
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -57,7 +57,7 @@ export class PaymentFormComponent implements OnInit {
       }
     });
 
-    // filter tenants array whenever property selection changes
+    //filter tenants array whenever property selection changes
     this.form.get('propertyId')?.valueChanges.subscribe((selectedPropertyId) => {
       const tenantControl = this.form.get('tenantId');
       
@@ -83,11 +83,16 @@ export class PaymentFormComponent implements OnInit {
   onSubmit(): void {
     if (this.form.invalid) return;
 
+    // Use getRawValue() to read properties even when form fields are currently disabled
     const rawValues = this.form.getRawValue();
     
+    //Safely parse values. Fall back to raw string if alphanumeric characters exist to prevent NaN
+    const parsedPropertyId = isNaN(Number(rawValues.propertyId)) ? rawValues.propertyId : Number(rawValues.propertyId);
+    const parsedTenantId = isNaN(Number(rawValues.tenantId)) ? rawValues.tenantId : Number(rawValues.tenantId);
+
     const cleanPayload: Omit<RentPayment, 'id'> = {
-      propertyId: Number(rawValues.propertyId),
-      tenantId: Number(rawValues.tenantId),
+      propertyId: parsedPropertyId as any,
+      tenantId: parsedTenantId as any,
       amount: Number(rawValues.amount),
       date: rawValues.date,
       status: rawValues.status as PaymentStatus

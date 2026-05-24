@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';       
 import { PropertyService } from '../../services/property.service';
 import { Property } from '../../models/property.model';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-property-list',
@@ -11,7 +13,15 @@ import { Property } from '../../models/property.model';
   templateUrl: './property-list.component.html',
 })
 export class PropertyListComponent implements OnInit {
-  properties: Property[] = [];
+  // Master data stream tracking source inputs from backend
+  private propertiesSubject = new BehaviorSubject<Property[]>([]);
+  
+  // Reactive search input term anchor subject string stream
+  private searchSubject = new BehaviorSubject<string>('');
+  
+  // Expose fully combined filter stream directly to template async pipes
+  filteredProperties$!: Observable<Property[]>;
+
   loading = true;
   error: string | null = null;
 
@@ -21,18 +31,35 @@ export class PropertyListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // 1. Initialize the parallel reactive combination stream pipeline logic
+    this.filteredProperties$ = combineLatest([
+      this.propertiesSubject.asObservable(),
+      this.searchSubject.asObservable().pipe(startWith(''))
+    ]).pipe(
+      map(([properties, searchTerm]) => {
+        const cleanTerm = searchTerm.toLowerCase().trim();
+        if (!cleanTerm) return properties;
+        
+        // Filter elements reactive mapping across dynamic field boundaries
+        return properties.filter(p => 
+          p.name.toLowerCase().includes(cleanTerm) || 
+          p.address.toLowerCase().includes(cleanTerm)
+        );
+      })
+    );
+
+    // 2. Fetch data payload records
     this.loadProperties();
   }
 
   loadProperties(): void {
     this.loading = true;
     
-    // Fetch all properties from the backend service
     this.propertyService.getAll().subscribe({
       next: (data) => {
-        this.properties = data || [];
+        const rawList = data || [];
+        this.propertiesSubject.next(rawList); // Emits raw data list downstream
         this.loading = false;
-        // Sync async changes with UI immediately
         this.cdr.detectChanges(); 
       },
       error: (err) => {
@@ -43,12 +70,18 @@ export class PropertyListComponent implements OnInit {
     });
   }
 
-  onDelete(id: number, name: string): void {
-    // Prompt confirmation before deleting a record
+  // Reactive input hook tied directly to change stream emitters
+  onSearchChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchSubject.next(value);
+  }
+
+  // FIX: Parameter signatures widened to accept string or number IDs safely
+  onDelete(id: string | number, name: string): void {
     if (confirm(`Are you sure you want to delete "${name}"?`)) {
       this.propertyService.delete(id).subscribe({
         next: () => {
-          this.loadProperties(); // Refresh list after successful deletion
+          this.loadProperties(); // Reloads master streams automatically following mutations
         },
         error: () => alert('Failed to completely delete the property record.')
       });

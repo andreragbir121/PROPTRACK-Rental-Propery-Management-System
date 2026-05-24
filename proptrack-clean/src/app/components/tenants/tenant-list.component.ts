@@ -4,7 +4,9 @@ import { RouterModule } from '@angular/router';
 import { TenantService } from '../../services/tenant.service';
 import { PropertyService } from '../../services/property.service';
 import { Tenant } from '../../models/tenant.model';
-import { Property } from '../../models/property.model';
+import { Property, PropertyStatus } from '../../models/property.model'; 
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -14,60 +16,102 @@ import { forkJoin } from 'rxjs';
   templateUrl: './tenant-list.component.html',
 })
 export class TenantListComponent implements OnInit {
-  tenants: Tenant[] = [];
-  // Look up property names by ID
-  propertiesMap: { [key: number]: string } = {}; 
+  // Master data stream tracking source inputs from backend
+  private tenantsSubject = new BehaviorSubject<Tenant[]>([]);
+  
+  // Reactive search input term anchor subject string stream
+  private searchSubject = new BehaviorSubject<string>('');
+  
+  // Expose fully combined filter stream directly to template async pipes
+  filteredTenants$!: Observable<Tenant[]>;
+
+  // FIX: Index type map adjusted to accept both string and number keys safely
+  propertiesMap: { [key: string | number]: string } = {}; 
   loading = true;
   error: string | null = null;
 
   constructor(
     private tenantService: TenantService,
-    private propertyService: PropertyService,
+    private propertyService: PropertyService, 
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    // 1. Initialize the parallel reactive combination stream pipeline logic
+    this.filteredTenants$ = combineLatest([
+      this.tenantsSubject.asObservable(),
+      this.searchSubject.asObservable().pipe(startWith(''))
+    ]).pipe(
+      map(([tenants, searchTerm]) => {
+        const cleanTerm = searchTerm.toLowerCase().trim();
+        if (!cleanTerm) return tenants;
+        
+        // Live filters matches across tenant names or linked contact details
+        return tenants.filter(t => 
+          t.name.toLowerCase().includes(cleanTerm) ||
+          t.contact.toLowerCase().includes(cleanTerm)
+        );
+      })
+    );
+
+    // 2. Fetch master data records
     this.loadData();
   }
 
   loadData(): void {
     this.loading = true;
     
-    // Fetch tenants and properties in parallel to map names to IDs
     forkJoin({
       tenants: this.tenantService.getAll(),
       properties: this.propertyService.getAll()
     }).subscribe({
       next: ({ tenants, properties }) => {
-        this.tenants = tenants || [];
+        // Push raw tenant list to stream handler
+        this.tenantsSubject.next(tenants || []);
         
-        // Build a lookup map for property names
-        const lookup: { [key: number]: string } = {};
+        // Build a flexible lookup map for property names supporting alphanumeric keys
+        const lookup: { [key: string | number]: string } = {};
         if (properties) {
           properties.forEach(p => lookup[p.id] = p.name);
         }
         this.propertiesMap = lookup;
         
         this.loading = false;
-        // Sync changes with UI immediately
         this.cdr.detectChanges(); 
       },
       error: (err) => {
         this.error = err.message || 'Failed to load data collections.';
         this.loading = false;
-        // Force view refresh to show error layout
         this.cdr.detectChanges(); 
       }
     });
   }
 
-  onDelete(id: number, name: string): void {
-    // Prompt confirmation before deleting a record
-    if (confirm(`Are you sure you want to remove tenant "${name}"?`)) {
-      this.tenantService.delete(id).subscribe({
+  // Reactive input hook tied directly to change stream emitters
+  onSearchChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchSubject.next(value);
+  }
+
+  onDelete(tenant: Tenant): void {
+    if (confirm(`Are you sure you want to remove tenant "${tenant.name}"?`)) {
+      
+      const linkedPropertyId = tenant.propertyId;
+
+      this.tenantService.delete(tenant.id).subscribe({
         next: () => {
-          // Refresh list after successful deletion
-          this.loadData(); 
+          
+          // AUTOMATION: Change property status flag back to Vacant securely using string/number signatures
+          this.propertyService.update(linkedPropertyId, { status: PropertyStatus.Vacant }).subscribe({
+            next: () => {
+              this.loadData(); // Refresh datasets on completion
+            },
+            error: (err) => {
+              console.error('Property status patch back to vacant failed: ', err);
+              this.loadData(); // Fallback data reload
+            }
+          });
+
         },
         error: () => alert('Failed to completely delete the tenant record.')
       });

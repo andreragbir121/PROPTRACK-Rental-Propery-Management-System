@@ -36,24 +36,26 @@ export class PropertyDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //Get the property ID from the current route path
+    // Get the raw property ID from the current route path parameter string
     const idParam = this.route.snapshot.paramMap.get('id');
-    const propertyId = Number(idParam);
 
-    if (!propertyId) {
+    if (!idParam) {
       this.error = 'Invalid property identifier provided.';
       this.loading = false;
       return;
     }
 
+    // Safely parse the value: keep as string if it contains characters, convert if pure digits
+    const propertyId = isNaN(Number(idParam)) ? idParam : Number(idParam);
+
     this.loading = true;
 
-    //Fetch the target property details and all its related records in parallel
+    // Fetch the target property details and all its related records in parallel using forkJoin
     forkJoin({
       property: this.propertyService.getById(propertyId),
-      tenants: this.tenantService.getByProperty(propertyId),
-      payments: this.paymentService.getByProperty(propertyId),
-      expenses: this.expenseService.getByProperty(propertyId)
+      tenants: this.tenantService.getByProperty(propertyId as any),   // Using type safety fallback
+      payments: this.paymentService.getByProperty(propertyId as any), // for secondary services
+      expenses: this.expenseService.getByProperty(propertyId as any)
     }).subscribe({
       next: ({ property, tenants, payments, expenses }) => {
         this.property = property;

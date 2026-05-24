@@ -13,44 +13,164 @@
       "address": "7 Churchill Roosevelt Hwy, Valsayn",
       "monthlyRent": 6000,
       "status": "Vacant"
+    },
+    {
+      "name": "Maraval Heights Villa",
+      "address": "Lot 4 Saddle Road, Maraval",
+      "monthlyRent": 8500,
+      "status": "Occupied",
+      "description": "Villa in Maraval",
+      "id": "Y0QXYbD0OSY"
+    },
+    {
+      "name": "Gulf View Residential Estate",
+      "address": "Lot 22 Coral Drive, Gulf View",
+      "monthlyRent": 9000,
+      "status": "Vacant",
+      "description": "Residential Gated Community with High Security For Safety",
+      "id": "FztMKhp1uHg"
+    },
+    {
+      "name": "Woodland Gardens Complex",
+      "address": "Lot 14 Dumfries Road, La Romain",
+      "monthlyRent": 8500,
+      "status": "Occupied",
+      "description": "",
+      "id": "QbIoPYO2Vik"
+    },
+    {
+      "name": "R.S. Beach House",
+      "address": "St. Marie's Village, Southern Main Road, Cedros,",
+      "monthlyRent": 50000,
+      "status": "Occupied",
+      "description": "Getaway vacation house, 5 minutes away from a beach. pool in back.",
+      "id": "YYIbOTLraoM"
     }
   ],
   "tenants": [
     {
-      "name": "Darren Singh",
-      "contact": "1868 312 1234",
-      "propertyId": 1,
-      "leaseStart": "2026-04-02",
-      "leaseEnd": "2027-04-02",
-      "id": "UZsCqrHINkg"
+      "name": "Kareem Joseph",
+      "contact": "1-868-713-0412",
+      "propertyId": "Y0QXYbD0OSY",
+      "leaseStart": "2026-02-01",
+      "leaseEnd": "2027-02-01",
+      "id": "CX1VL6F2lvA"
     },
     {
-      "name": "John Pork",
-      "contact": "1868 123 6543",
+      "name": "Larry Beam",
+      "contact": "1-876-412-1941",
+      "propertyId": "FztMKhp1uHg",
+      "leaseStart": "2026-06-01",
+      "leaseEnd": "2027-10-02",
+      "id": "cB2MDc76o9g"
+    },
+    {
+      "name": "Kevin Joseph",
+      "contact": "1-868-491-5931",
+      "propertyId": "YYIbOTLraoM",
+      "leaseStart": "2026-01-01",
+      "leaseEnd": "2026-12-31",
+      "id": "fBfgBn1GYuc"
+    },
+    {
+      "name": "Jenna Paul",
+      "contact": "1-868-350-4912",
+      "propertyId": "YYIbOTLraoM",
+      "leaseStart": "2026-01-01",
+      "leaseEnd": "2026-12-31",
+      "id": "zHPr-45apuM"
+    },
+    {
+      "name": "Emanual Dae",
+      "contact": "1-473-481-8513",
       "propertyId": 1,
-      "leaseStart": "2026-04-02",
-      "leaseEnd": "2027-04-02",
-      "id": "p3sfQaj1LEA"
+      "leaseStart": "2026-06-01",
+      "leaseEnd": "2027-01-01",
+      "id": "Yln-LGFhmn8"
+    },
+    {
+      "name": "Joe Furguson",
+      "contact": "1-868-481-4124",
+      "propertyId": "QbIoPYO2Vik",
+      "leaseStart": "2026-12-01",
+      "leaseEnd": "2027-09-21",
+      "id": "CSiT0ZhLXj4"
     }
   ],
   "rentPayments": [
     {
-      "propertyId": 1,
-      "tenantId": null,
-      "amount": 4000,
-      "date": "2026-05-03",
+      "propertyId": "YYIbOTLraoM",
+      "tenantId": "fBfgBn1GYuc",
+      "amount": 15000,
+      "date": "2026-01-31",
       "status": "Paid",
-      "id": "_ot2sgTnUgY"
+      "id": "qzmyAPTQleg"
+    },
+    {
+      "propertyId": "YYIbOTLraoM",
+      "tenantId": "zHPr-45apuM",
+      "amount": 15000,
+      "date": "2026-01-31",
+      "status": "Paid",
+      "id": "ENyFXt2YzpU"
+    },
+    {
+      "propertyId": "Y0QXYbD0OSY",
+      "tenantId": "CX1VL6F2lvA",
+      "amount": 8500,
+      "date": "2026-03-31",
+      "status": "Late",
+      "id": "SjCeLl9GF0s"
+    },
+    {
+      "propertyId": 1,
+      "tenantId": "Yln-LGFhmn8",
+      "amount": 3000,
+      "date": "2026-01-19",
+      "status": "Late",
+      "id": "YqUK9tXuy3Q"
+    },
+    {
+      "propertyId": "QbIoPYO2Vik",
+      "tenantId": "CSiT0ZhLXj4",
+      "amount": 8500,
+      "date": "2026-02-28",
+      "status": "Paid",
+      "id": "nQ2BH02ILiE"
     }
   ],
   "expenses": [
     {
+      "propertyId": 2,
+      "description": "AC unit servicing and clearing main drainage lines",
+      "amount": 2400,
+      "date": "2026-12-05",
+      "type": "Maintenance",
+      "id": "5IGIxhnBAWE"
+    },
+    {
+      "propertyId": "FztMKhp1uHg",
+      "description": "Lawn maintenance and perimeter hedge trimming",
+      "amount": 900,
+      "date": "2026-05-22",
+      "type": "Maintenance",
+      "id": "dmulyi1Fklk"
+    },
+    {
       "propertyId": 1,
-      "description": "Need To Fix Staircase",
-      "amount": 2000,
-      "date": "2026-09-29",
+      "description": "Fixing broken electrical main switches and emergency rewire",
+      "amount": 1150,
+      "date": "2026-05-12",
       "type": "Repair",
-      "id": "YccFwVsQSlQ"
+      "id": "W6WJj-9hEHU"
+    },
+    {
+      "propertyId": "YYIbOTLraoM",
+      "description": "Upgrading structural beachfront pillars and sea-blast reinforcement",
+      "amount": 4200,
+      "date": "2026-02-05",
+      "type": "Renovation",
+      "id": "tcoSDJhyLrE"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

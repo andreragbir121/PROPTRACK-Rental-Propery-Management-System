@@ -3,23 +3,38 @@
   <button routerLink="/properties/new" class="btn-add">Add New Property</button>
 </div>
 
+<div class="search-container">
+  <input 
+    type="text" 
+    class="search-input" 
+    placeholder="Search properties by name or address location..." 
+    (input)="onSearchChange($event)"
+  />
+</div>
+
 <div *ngIf="loading">Loading properties...</div>
 <div *ngIf="error" class="error-msg">{{ error }}</div>
 
-<div *ngIf="!loading && properties.length === 0">No properties found.</div>
+<ng-container *ngIf="filteredProperties$ | async as resolvedProperties">
+  
+  <div *ngIf="!loading && resolvedProperties.length === 0" class="no-results-msg">
+    No properties match your filter selection criteria.
+  </div>
 
-<div class="property-list" *ngIf="!loading && properties.length > 0">
-  <div *ngFor="let property of properties" class="property-card">
-    <h3>{{ property.name }}</h3>
-    <p><strong>Address:</strong> {{ property.address }}</p>
-    <p><strong>Rent:</strong> {{ property.monthlyRent }} TTD / month</p>
-    <span class="status-badge" [ngClass]="property.status.toLowerCase()">
-      {{ property.status }}
-    </span>
+  <div class="property-list" *ngIf="!loading && resolvedProperties.length > 0">
+    <div *ngFor="let property of resolvedProperties" class="property-card">
+      <h3>{{ property.name }}</h3>
+      <p><strong>Address:</strong> {{ property.address }}</p>
+      <p><strong>Rent:</strong> {{ property.monthlyRent }} TTD / month</p>
+      <span class="status-badge" [ngClass]="property.status.toLowerCase()">
+        {{ property.status }}
+      </span>
 
-    <div class="card-actions">
-      <button [routerLink]="['/properties', property.id]" class="btn-view">View Details</button>
-      <button (click)="onDelete(property.id, property.name)" class="btn-delete">Delete</button>
+      <div class="card-actions">
+        <button [routerLink]="['/properties', property.id]" class="btn-view">View Details</button>
+        <button (click)="onDelete(property.id, property.name)" class="btn-delete">Delete</button>
+      </div>
     </div>
   </div>
-</div>
+
+</ng-container>

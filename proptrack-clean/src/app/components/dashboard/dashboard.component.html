@@ -38,33 +38,44 @@
 
   </div>
 
-  <div class="sub-section" style="max-width: 600px; margin-top: 2rem;">
-    <h3>Recent Ledger Transactions</h3>
+  <div class="dashboard-insights-row">
     
-    <div *ngIf="data.recentPayments.length === 0" class="mini-empty" style="padding: 1rem 0; color: var(--text-muted);">
-      No payment transactions recorded in the system yet.
+    <div class="sub-section dashboard-ledger-card">
+      <h3>Recent Ledger Transactions</h3>
+      
+      <div *ngIf="data.recentPayments.length === 0" class="mini-empty">
+        No payment transactions recorded in the system yet.
+      </div>
+
+      <table class="data-table" *ngIf="data.recentPayments.length > 0">
+        <thead>
+          <tr>
+            <th>Payment Date</th>
+            <th>Amount Received</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let payment of data.recentPayments">
+            <td>{{ payment.date | date:'mediumDate' }}</td>
+            <td><strong>{{ payment.amount }} TTD</strong></td>
+            <td>
+              <span class="status-badge" [ngClass]="payment.status.toLowerCase()">
+                {{ payment.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <table class="data-table" *ngIf="data.recentPayments.length > 0">
-      <thead>
-        <tr>
-          <th>Payment Date</th>
-          <th>Amount Received</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let payment of data.recentPayments">
-          <td>{{ payment.date | date:'mediumDate' }}</td>
-          <td><strong>{{ payment.amount }} TTD</strong></td>
-          <td>
-            <span class="status-badge" [ngClass]="payment.status.toLowerCase()">
-              {{ payment.status }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="chart-wrapper-card">
+      <h3 class="chart-title">Operational Expenses by Type</h3>
+      <div class="canvas-container">
+        <canvas #expenseCanvas width="480" height="260"></canvas>
+      </div>
+    </div>
+
   </div>
 
 </div>

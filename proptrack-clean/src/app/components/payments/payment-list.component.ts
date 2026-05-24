@@ -15,8 +15,10 @@ import { forkJoin } from 'rxjs';
 })
 export class PaymentListComponent implements OnInit {
   payments: RentPayment[] = [];
-  propertiesMap: { [key: number]: string } = {}; 
-  tenantsMap: { [key: number]: string } = {}; 
+  
+  propertiesMap: { [key: string | number]: string } = {}; 
+  tenantsMap: { [key: string | number]: string } = {}; 
+  
   loading = true;
   error: string | null = null;
 
@@ -34,22 +36,42 @@ export class PaymentListComponent implements OnInit {
   loadPayments(): void {
     this.loading = true;
     
-    // Fetch payments, properties, and tenants in parallel
+    // Fetch payments, properties, and tenants in parallel using forkJoin
     forkJoin({
       payments: this.paymentService.getAll(),
       properties: this.propertyService.getAll(),
       tenants: this.tenantService.getAll()
     }).subscribe({
       next: ({ payments, properties, tenants }) => {
-        this.payments = payments || [];
+        // Get today's date stripped of its timestamp for an accurate day-by-day calendar comparison
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        //Check each payment and flag as 'Late' if it is past due
+        this.payments = (payments || []).map(payment => {
+          const expectedDate = new Date(payment.date);
+          // Set to midnight to prevent comparing hour ticks
+          expectedDate.setHours(0, 0, 0, 0); 
+
+          if (payment.status === 'Pending' && expectedDate < today) {
+            //Instantly update the local UI model bound item
+            payment.status = 'Late' as any;
+
+            //Fire an automatic, silent service update to keep db.json permanently in sync
+            this.paymentService.update(payment.id, { status: 'Late' as any }).subscribe({
+              error: (err) => console.error(`Failed to auto-update late record ID ${payment.id}:`, err)
+            });
+          }
+          return payment;
+        });
         
-        //lookup map for property names
-        const propLookup: { [key: number]: string } = {};
+        // Lookup map for property names using explicit ID mapping
+        const propLookup: { [key: string | number]: string } = {};
         if (properties) properties.forEach(p => propLookup[p.id] = p.name);
         this.propertiesMap = propLookup;
 
-        //map for tenant names
-        const tenantLookup: { [key: number]: string } = {};
+        // Lookup map for tenant names using explicit ID mapping
+        const tenantLookup: { [key: string | number]: string } = {};
         if (tenants) tenants.forEach(t => tenantLookup[t.id] = t.name);
         this.tenantsMap = tenantLookup;
 
@@ -65,11 +87,12 @@ export class PaymentListComponent implements OnInit {
     });
   }
 
-  onDelete(id: number): void {
-    // Prompt confirmation before deleting a record
+  // Adjusted parameter signature to cleanly execute deletions for string or number entries
+  onDelete(id: string | number): void {
+    // Prompt confirmation before executing delete record action (Section 9 Criteria)
     if (confirm('Are you sure you want to delete this payment record?')) {
       this.paymentService.delete(id).subscribe({
-        next: () => this.loadPayments(),
+        next: () => this.loadPayments(), // Refreshes list automatically following confirmed deletion
         error: () => alert('Failed to delete payment record.')
       });
     }

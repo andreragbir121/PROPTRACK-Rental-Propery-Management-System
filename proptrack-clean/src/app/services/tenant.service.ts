@@ -16,12 +16,12 @@ export class TenantService {
     );
   }
 
-  // Fetch tenants filtered by a specific property ID
-  getByProperty(propId: number): Observable<Tenant[]> {
-    return this.http.get<Tenant[]>(`${this.apiUrl}?propertyId=${propId}`).pipe(
-      catchError(err => throwError(() => new Error('Failed to load tenants for property')))
-    );
-  }
+// Fetch tenants assigned to a specific property (Updated to support both string and number IDs)
+getByProperty(propId: string | number): Observable<Tenant[]> {
+  return this.http.get<Tenant[]>(`${this.apiUrl}?propertyId=${propId}`).pipe(
+    catchError(err => throwError(() => new Error('Failed to load tenants for this property')))
+  );
+}
 
   // Save a new tenant record where ID is omitted as the backend handles auto-generation
   create(data: Omit<Tenant, 'id'>): Observable<Tenant> {

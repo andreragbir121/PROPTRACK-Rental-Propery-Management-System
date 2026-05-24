@@ -16,9 +16,9 @@ import { Expense, ExpenseType } from '../../models/expense.model';
 export class ExpenseFormComponent implements OnInit {
   properties: Property[] = [];
   
-  // Model setup omitting auto-generated primary key ID
+  // Model setup handling a flexible string or number signature
   expense: Omit<Expense, 'id'> = {
-    propertyId: 0,
+    propertyId: '' as any,
     description: '',
     amount: 0,
     date: '',
@@ -39,7 +39,8 @@ export class ExpenseFormComponent implements OnInit {
     this.propertyService.getAll().subscribe({
       next: (data) => {
         this.properties = data || [];
-        this.cdr.detectChanges(); // Prevent rendering delay on initial click
+        //Prevent rendering delay on initial click
+        this.cdr.detectChanges(); 
       },
       error: () => alert('Failed to load properties')
     });
@@ -48,9 +49,13 @@ export class ExpenseFormComponent implements OnInit {
   onSubmit(form: NgForm): void {
     if (form.invalid) return;
 
-    // Convert input values to numbers to match database types
+    //parse propertyId. Keeps string value if alphanumeric
+    const parsedPropertyId = isNaN(Number(this.expense.propertyId))
+      ? this.expense.propertyId
+      : Number(this.expense.propertyId);
+
     const cleanPayload: Omit<Expense, 'id'> = {
-      propertyId: Number(this.expense.propertyId),
+      propertyId: parsedPropertyId as any,
       description: this.expense.description,
       amount: Number(this.expense.amount),
       date: this.expense.date,
@@ -61,7 +66,8 @@ export class ExpenseFormComponent implements OnInit {
     this.expenseService.create(cleanPayload).subscribe({
       next: () => {
         form.resetForm();
-        this.router.navigate(['/expenses']); // Direct user back to main index
+      //Direct user back to main index
+        this.router.navigate(['/expenses']); 
       },
       error: () => alert('Failed to save expense record')
     });
