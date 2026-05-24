@@ -45,6 +45,14 @@
       "status": "Occupied",
       "description": "Getaway vacation house, 5 minutes away from a beach. pool in back.",
       "id": "YYIbOTLraoM"
+    },
+    {
+      "name": "test",
+      "address": "test",
+      "monthlyRent": 124,
+      "status": "Occupied",
+      "description": "test",
+      "id": "p1MM-Z1g69E"
     }
   ],
   "tenants": [
@@ -95,6 +103,14 @@
       "leaseStart": "2026-12-01",
       "leaseEnd": "2027-09-21",
       "id": "CSiT0ZhLXj4"
+    },
+    {
+      "name": "test",
+      "contact": "12345",
+      "propertyId": "p1MM-Z1g69E",
+      "leaseStart": "2002-12-12",
+      "leaseEnd": "2022-12-12",
+      "id": "D26gCyXEHN4"
     }
   ],
   "rentPayments": [
@@ -115,14 +131,6 @@
       "id": "ENyFXt2YzpU"
     },
     {
-      "propertyId": "Y0QXYbD0OSY",
-      "tenantId": "CX1VL6F2lvA",
-      "amount": 8500,
-      "date": "2026-03-31",
-      "status": "Late",
-      "id": "SjCeLl9GF0s"
-    },
-    {
       "propertyId": 1,
       "tenantId": "Yln-LGFhmn8",
       "amount": 3000,
@@ -137,6 +145,22 @@
       "date": "2026-02-28",
       "status": "Paid",
       "id": "nQ2BH02ILiE"
+    },
+    {
+      "propertyId": "p1MM-Z1g69E",
+      "tenantId": "D26gCyXEHN4",
+      "amount": 123,
+      "date": "1111-12-12",
+      "status": "Paid",
+      "id": "uGjzVEIu9xs"
+    },
+    {
+      "propertyId": "Y0QXYbD0OSY",
+      "tenantId": "CX1VL6F2lvA",
+      "amount": 8500,
+      "date": "2026-09-09",
+      "status": "Pending",
+      "id": "2MByI1TmOWs"
     }
   ],
   "expenses": [
