@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core'; 
+import { CommonModule, isPlatformBrowser } from '@angular/common'; 
 import { RouterModule } from '@angular/router';
 import { TenantService } from '../../services/tenant.service';
 import { PropertyService } from '../../services/property.service';
@@ -29,12 +29,16 @@ export class TenantListComponent implements OnInit {
   propertiesMap: { [key: string | number]: string } = {}; 
   loading = true;
   error: string | null = null;
+  private isBrowser: boolean;
 
   constructor(
     private tenantService: TenantService,
     private propertyService: PropertyService, 
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) platformId: object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   ngOnInit(): void {
     // Initialize the parallel reactive combination stream pipeline logic
@@ -93,7 +97,9 @@ export class TenantListComponent implements OnInit {
     this.searchSubject.next(value);
   }
 
-  onDelete(tenant: Tenant): void {
+ onDelete(tenant: Tenant): void {
+    if (!this.isBrowser) return;
+
     if (confirm(`Are you sure you want to remove tenant "${tenant.name}"?`)) {
       
       const linkedPropertyId = tenant.propertyId;
@@ -113,7 +119,10 @@ export class TenantListComponent implements OnInit {
           });
 
         },
-        error: () => alert('Failed to completely delete the tenant record.')
+        error: (err) => {
+          console.error('Tenant deletion request failed:', err);
+          alert('Failed to completely delete the tenant record.');
+        }
       });
     }
   }

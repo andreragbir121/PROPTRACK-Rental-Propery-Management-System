@@ -19,6 +19,7 @@ export class ExpenseListComponent implements OnInit {
   propertiesMap: { [key: string | number]: string } = {}; 
   loading = true;
   error: string | null = null;
+  isBrowser = typeof window !== 'undefined';
 
   constructor(
     private expenseService: ExpenseService,
@@ -56,13 +57,17 @@ export class ExpenseListComponent implements OnInit {
     });
   }
 
-  // Signature updated to accept string
+// Signature updated to accept string
   onDelete(id: string | number, desc: string): void {
-    // Prompt confirmation before deleting a record
+    if (!this.isBrowser) return;
+
     if (confirm(`Are you sure you want to delete the expense item: "${desc}"?`)) {
       this.expenseService.delete(id).subscribe({
         next: () => this.loadExpenses(),
-        error: () => alert('Failed to delete expense entry.')
+        error: (err) => {
+          console.error('Delete operation failed:', err);
+          alert('Failed to delete expense entry.');
+        }
       });
     }
   }

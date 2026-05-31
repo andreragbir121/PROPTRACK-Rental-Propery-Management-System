@@ -52,7 +52,7 @@ export class PropertyFormComponent {
         // Redirect to the property listing page
         this.router.navigate(['/properties']); 
       },
-      error: () => alert('Failed to save property')
+      error: (err) => console.error('Failed to save property', err)
     });
   }
 }

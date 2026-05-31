@@ -24,6 +24,7 @@ export class PropertyListComponent implements OnInit {
 
   loading = true;
   error: string | null = null;
+  isBrowser: any;
 
   constructor(
     private propertyService: PropertyService,
@@ -76,15 +77,22 @@ export class PropertyListComponent implements OnInit {
     this.searchSubject.next(value);
   }
 
-  // Parameter signatures widened to accept string or number IDs safely
+// Parameter signatures widened to accept string or number IDs safely
   onDelete(id: string | number, name: string): void {
+    // 
+    if (!this.isBrowser) return;
+
+    // 
     if (confirm(`Are you sure you want to delete "${name}"?`)) {
       this.propertyService.delete(id).subscribe({
         next: () => {
           // Reload the properties list after deletion to reflect changes
           this.loadProperties(); 
         },
-        error: () => alert('Failed to completely delete the property record.')
+        error: (err) => {
+          console.error('Delete request failed:', err);
+          alert('Failed to completely delete the property record.');
+        }
       });
     }
   }

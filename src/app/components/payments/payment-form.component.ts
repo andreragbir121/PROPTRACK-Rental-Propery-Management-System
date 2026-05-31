@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; 
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core'; // 🌟 Added Inject & PLATFORM_ID
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { PaymentService } from '../../services/payment.service';
@@ -21,6 +21,7 @@ export class PaymentFormComponent implements OnInit {
   allTenants: Tenant[] = [];       
   filteredTenants: Tenant[] = [];  
   form: FormGroup;
+  private isBrowser: boolean; 
 
   constructor(
     private fb: FormBuilder,
@@ -28,8 +29,11 @@ export class PaymentFormComponent implements OnInit {
     private propertyService: PropertyService,
     private tenantService: TenantService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) platformId: Object 
   ) {
+    this.isBrowser = isPlatformBrowser(platformId); 
+    
     this.form = this.fb.group({
       propertyId: ['', Validators.required],
       tenantId: [{ value: '', disabled: true }, Validators.required],
@@ -53,7 +57,9 @@ export class PaymentFormComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to load form lookup records:', err);
-        alert('Failed to load property or tenant selection data.');
+        if (this.isBrowser) {
+          alert('Failed to load property or tenant selection data.');
+        }
       }
     });
 
@@ -103,7 +109,12 @@ export class PaymentFormComponent implements OnInit {
         this.form.reset();
         this.router.navigate(['/payments']);
       },
-      error: () => alert('Failed to save payment record')
+      error: (err) => {
+        console.error('Failed to save payment record:', err);
+        if (this.isBrowser) {
+          alert('Failed to save payment record');
+        }
+      }
     });
   }
 }

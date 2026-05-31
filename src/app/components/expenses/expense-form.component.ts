@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; 
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core'; 
+import { CommonModule, isPlatformBrowser } from '@angular/common'; 
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ExpenseService } from '../../services/expense.service';
@@ -15,6 +15,7 @@ import { Expense, ExpenseType } from '../../models/expense.model';
 })
 export class ExpenseFormComponent implements OnInit {
   properties: Property[] = [];
+  private isBrowser: boolean;
   
   // Model setup handling a flexible string or number signature
   expense: Omit<Expense, 'id'> = {
@@ -31,8 +32,11 @@ export class ExpenseFormComponent implements OnInit {
     private expenseService: ExpenseService,
     private propertyService: PropertyService,
     private router: Router,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) platformId: Object 
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId); 
+  }
 
   ngOnInit(): void {
     // Populate dropdown options on load
@@ -42,7 +46,12 @@ export class ExpenseFormComponent implements OnInit {
         //Prevent rendering delay on initial click
         this.cdr.detectChanges(); 
       },
-      error: () => alert('Failed to load properties')
+      error: (err) => {
+        console.error('Failed to load properties:', err);
+        if (this.isBrowser) {
+          alert('Failed to load properties');
+        }
+      }
     });
   }
 
@@ -66,10 +75,15 @@ export class ExpenseFormComponent implements OnInit {
     this.expenseService.create(cleanPayload).subscribe({
       next: () => {
         form.resetForm();
-      //Direct user back to main index
+        //Direct user back to main index
         this.router.navigate(['/expenses']); 
       },
-      error: () => alert('Failed to save expense record')
+      error: (err) => {
+        console.error('Failed to save expense record:', err);
+        if (this.isBrowser) {
+          alert('Failed to save expense record');
+        }
+      }
     });
   }
 }
