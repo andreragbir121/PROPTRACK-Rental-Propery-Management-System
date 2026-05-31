@@ -32,7 +32,7 @@
             "styles": [
               "src/styles.scss"
             ],
-            "outputMode": "browser", 
+            "outputMode": "static", 
             "security": {
               "allowedHosts": []
             },
