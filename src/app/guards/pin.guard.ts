@@ -1,17 +1,19 @@
-import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+// COMMENTED OF SO USERS CAN BE ABLE TO ACCESS THE SITE WITHOUT A PIN
 
-export const pinGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+// import { inject } from '@angular/core';
+// import { CanActivateFn, Router } from '@angular/router';
+// import { AuthService } from '../services/auth.service';
 
-  if (authService.isLoggedIn) {
-    return true;
-  }
+// export const pinGuard: CanActivateFn = (route, state) => {
+//   const authService = inject(AuthService);
+//   const router = inject(Router);
 
-  // Redirect to PIN entry page with return URL for post-login navigation
-  return router.createUrlTree(['/pin-entry'], {
-    queryParams: { returnUrl: state.url }
-  });
-};
+//   if (authService.isLoggedIn) {
+//     return true;
+//   }
+
+//   // Redirect to PIN entry page with return URL for post-login navigation
+//   return router.createUrlTree(['/pin-entry'], {
+//     queryParams: { returnUrl: state.url }
+//   });
+// };

@@ -53,6 +53,14 @@
       "status": "Occupied",
       "description": "test",
       "id": "p1MM-Z1g69E"
+    },
+    {
+      "name": "Beach House Point",
+      "address": "Point Fortin",
+      "monthlyRent": 3000,
+      "status": "Occupied",
+      "description": "Beach House",
+      "id": "-jrQpwNe-0M"
     }
   ],
   "tenants": [
@@ -111,6 +119,14 @@
       "leaseStart": "2002-12-12",
       "leaseEnd": "2022-12-12",
       "id": "D26gCyXEHN4"
+    },
+    {
+      "name": "John Tom",
+      "contact": "12345678",
+      "propertyId": "-jrQpwNe-0M",
+      "leaseStart": "2026-04-20",
+      "leaseEnd": "2027-02-02",
+      "id": "4fRo9h5Yct0"
     }
   ],
   "rentPayments": [
@@ -195,6 +211,14 @@
       "date": "2026-02-05",
       "type": "Renovation",
       "id": "tcoSDJhyLrE"
+    },
+    {
+      "propertyId": "-jrQpwNe-0M",
+      "description": "Upgrading structural beachfront pillars and sea-blast reinforcement",
+      "amount": 4000,
+      "date": "2026-02-05",
+      "type": "Repair",
+      "id": "6wbfoLg-hNk"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

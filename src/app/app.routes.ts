@@ -22,17 +22,17 @@ import { ExpenseListComponent } from './components/expenses/expense-list.compone
 import { ExpenseFormComponent } from './components/expenses/expense-form.component'; 
 
 // Security Additions (PIN Guard Implementation)
-import { PinEntryComponent } from './components/pin-entry/pin-entry.component';
-import { pinGuard } from './guards/pin.guard';
+// import { PinEntryComponent } from './components/pin-entry/pin-entry.component';
+// import { pinGuard } from './guards/pin.guard';
 
 export const routes: Routes = [
   // Public route — Anyone can access this page to provide verification
-  { path: 'pin-entry', component: PinEntryComponent },
+  // { path: 'pin-entry', component: PinEntryComponent },
 
   // Protected Routes Group. Require a valid PIN entry session before unlocking
   {
     path: '',
-    canActivate: [pinGuard],
+    canActivate: [],
     children: [
       { path: '', component: DashboardComponent },
       

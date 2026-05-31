@@ -161,7 +161,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       ctx.fillText(`$${val}`, x + (barWidth / 2), y - 8);
     });
 
-    // 4. Draw base axis line indicator border limits
+    // Draw base axis line indicator border limits
     ctx.beginPath();
     ctx.moveTo(paddingLeftRight, canvas.height - paddingTopBottom);
     ctx.lineTo(canvas.width - paddingLeftRight, canvas.height - paddingTopBottom);
