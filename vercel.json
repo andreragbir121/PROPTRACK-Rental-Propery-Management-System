@@ -1,6 +1,8 @@
-"assets": [
-  {
-    "glob": "**/*",
-    "input": "public"
-  }
-]
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
