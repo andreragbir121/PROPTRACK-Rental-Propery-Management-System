@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core'; 
-import { isPlatformBrowser } from '@angular/common'; // 🌟 Add this import
+import { isPlatformBrowser } from '@angular/common'; 
 import { forkJoin } from 'rxjs';
 import { PropertyService } from '../../services/property.service';
 import { TenantService } from '../../services/tenant.service';
@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   error: string | null = null;
   
   private rawExpensesList: any[] = [];
-  private isBrowser: boolean; // 🌟 Tracking variable
+  private isBrowser: boolean;
 
   constructor(
     private propertyService: PropertyService,
@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private paymentService: PaymentService,
     private expenseService: ExpenseService,
     private cdr: ChangeDetectorRef,
-    @Inject(PLATFORM_ID) platformId: Object // 🌟 Inject Platform ID to see where code is executing
+    @Inject(PLATFORM_ID) platformId: Object
   ) {
     // Determine if we are on Vercel's server runtime or a client browser window
     this.isBrowser = isPlatformBrowser(platformId);
